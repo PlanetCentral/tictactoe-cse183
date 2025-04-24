@@ -8,28 +8,34 @@ const app = Vue.createApp({
             ],
             player: "X",
             computer: "O",
+            message: ""
         };
     },
     methods: {
         play(i, j) {
-            if (this.board[i][j] !== "") return;
+            if (this.board[i][j] !== "" || this.message) return;
 
             this.board[i][j] = this.player;
 
-            if (!this.isGameOver()) {
+            if (this.checkWinner(this.player)) {
+                this.message = "How did you f-cking win! Outstanding move.";
+            } else if (this.isDraw()) {
+                this.message = "How the f-ck? It's a f-cking draw.";
+            } else {
                 this.computerPlay();
+                if (this.checkWinner(this.computer)) {
+                    this.message = "You f-cking lose! Perhaps another match? I'll beat you AGAIN.";
+                } else if (this.isDraw()) {
+                    this.message = "How the f-ck? It's a f-cking draw.";
+                }
             }
         },
         computerPlay() {
-            // Minimax logic for unbeatable AI
             const bestMove = this.findBestMove();
             if (bestMove) {
                 const { i, j } = bestMove;
                 this.board[i][j] = this.computer;
             }
-        },
-        isGameOver() {
-            return this.checkWinner(this.player) || this.checkWinner(this.computer) || this.isDraw();
         },
         isDraw() {
             return this.board.flat().every(cell => cell !== "");
@@ -101,6 +107,7 @@ const app = Vue.createApp({
                 ["", "", ""],
                 ["", "", ""]
             ];
+            this.message = "";
         }
     }
 });
