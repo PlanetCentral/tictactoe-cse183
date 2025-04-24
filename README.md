@@ -1,1 +1,1 @@
-# tictactoe-cse183
+# cse-183 tictactoe game
